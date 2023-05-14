@@ -64,7 +64,7 @@
 			</div>
 			<br />
 			<div>
-				<a class="button rounded" href="/login/">Get started →</a>
+				<a class="button rounded" href="/">Get started →</a>
 			</div>
 		</div>
 	</div>
