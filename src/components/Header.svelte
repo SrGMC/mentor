@@ -32,7 +32,7 @@
 			<a href="#about">About</a>
 		</li>
 		<li>
-			<a class="button rounded" href="/">Get started</a>
+			<a class="button rounded" href="/dashboard/">Get started</a>
 		</li>
 	</ul>
 </nav>

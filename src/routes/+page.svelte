@@ -1,9 +1,4 @@
 <script lang="ts">
-	import '$lib/styles/style.css';
-	import '$lib/styles/grid.css';
-	import 'line-awesome/dist/line-awesome/css/line-awesome.min.css';
-
-	import Header from '../components/Header.svelte';
 	import Cart from '../components/Cart.svelte';
 
 	let products = [
@@ -54,8 +49,6 @@
 
 <svelte:head />
 
-<Header />
-
 <div class="jumbotron">
 	<div class="header">
 		<div>
@@ -64,7 +57,7 @@
 			</div>
 			<br />
 			<div>
-				<a class="button rounded" href="/">Get started →</a>
+				<a class="button rounded" href="/dashboard/">Get started →</a>
 			</div>
 		</div>
 	</div>
