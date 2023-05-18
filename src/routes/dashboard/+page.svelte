@@ -1,8 +1,10 @@
 <script lang="ts">
 	import ProjectList from "../../components/ProjectList.svelte";
-
-
 </script>
+
+<svelte:head>
+	<title>My projects | Mentor</title>
+</svelte:head>
 
 <div class="content">
     <h1>My projects</h1>

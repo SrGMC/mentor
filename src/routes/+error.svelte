@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-
+	<title>{$page.status} - {$page.error?.message} | Mentor</title>
 </svelte:head>
 
 <div class="content">

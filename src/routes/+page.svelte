@@ -47,7 +47,9 @@
 	];
 </script>
 
-<svelte:head />
+<svelte:head>
+	<title>Mentor</title>
+</svelte:head>
 
 <div class="jumbotron">
 	<div class="header">
