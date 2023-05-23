@@ -57,3 +57,30 @@ a.button {
     color: var(--light-color);
     text-decoration: none;
 }
+
+div.error {
+    color: #fff;
+    background-color:#c92a2a ;
+    max-width: 700px;
+    padding: 15px;
+    margin: 15px auto;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--dark-color);
+}
+
+/* Steps */
+.step h1 {
+    font-size: 3.5rem;
+}
+
+.step p, .step ul, .step ol {
+    font-size: 1.6rem;
+}
+
+.step .col {
+    padding: 0 15px;
+}
+
+.step img {
+    width: 100%;
+}

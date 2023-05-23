@@ -1,37 +1,31 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ProjectItem from './ProjectItem.svelte';
+	import type { UserProject } from '../data/types';
+	import { getUserProjects } from '$lib/scripts/utils';
 
-	let projects: any[] = [];
+	let projects: UserProject[] = [];
 
 	onMount(() => {
 		if (!localStorage.getItem('projects')) {
 			projects = [
 				{
-                    id: 1,
-					title: 'My project',
-					type: 'woodwork',
+					id: 1,
+					projectId: 1,
 					lastOpened: new Date(),
-					percentCompleted: 10,
-					image: '/assets/woodwork.jpg'
+					currentStep: 0
 				}
 			];
+			localStorage.setItem('projects', JSON.stringify(projects));
 		} else {
-			projects = JSON.parse(<string>localStorage.getItem('projects'));
+			projects = getUserProjects();
 		}
 	});
 </script>
 
 <div class="list">
 	{#each projects as project}
-		<ProjectItem
-            id={project.id}
-			title={project.title}
-			type={project.type}
-			lastOpened={project.lastOpened.toLocaleDateString()}
-			percentCompleted={project.percentCompleted}
-			image={project.image}
-		/>
+		<ProjectItem bind:userProject={project} />
 	{/each}
 </div>
 

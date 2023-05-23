@@ -1,5 +1,6 @@
 <script lang="ts">
-	import ProjectList from "../../components/ProjectList.svelte";
+	import { browser } from "$app/environment";
+    import ProjectList from "../../components/ProjectList.svelte";
 </script>
 
 <svelte:head>
@@ -9,6 +10,9 @@
 <div class="content">
     <h1>My projects</h1>
     <div class="create-button">
+        {#if browser && !localStorage.getItem('board')}
+            <a href="/link/" class="button"><i class="las la-link"></i> Link board</a>
+        {/if}
         <button disabled class="button"><i class="la la-plus"></i> Create project</button>
     </div>
     <ProjectList />
@@ -19,6 +23,7 @@
 		margin: 0 auto;
 		max-width: 1200px;
         margin-top: 120px;
+        padding: 0 10px;
 	}
     h1 {
         font-size: 3rem;

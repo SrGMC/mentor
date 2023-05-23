@@ -1,50 +1,21 @@
 <script lang="ts">
 	import Cart from '../components/Cart.svelte';
+	import { products } from '../data/products';
 
-	let products = [
-		{
-			id: 1,
-			name: 'woodwork',
-			price: 165.289,
-			inCart: false,
-			image: '/assets/woodwork.jpg'
-		},
-		{
-			id: 2,
-			name: 'paperwork',
-			price: 165.289,
-			inCart: false,
-			image: '/assets/paperwork.jpg'
-		},
-		{
-			id: 3,
-			name: 'sewing kit',
-			price: 165.289,
-			inCart: false,
-			image: '/assets/sewing.jpg'
-		},
-		{
-			id: 4,
-			name: 'electronics',
-			price: 165.289,
-			inCart: false,
-			image: '/assets/electronics.jpg'
-		},
-		{
-			id: 5,
-			name: 'kitchen',
-			price: 165.289,
-			inCart: false,
-			image: '/assets/kitchenwork.jpg'
-		},
-		{
-			id: 6,
-			name: 'artists',
-			price: 165.289,
-			inCart: false,
-			image: '/assets/painting.jpg'
+	let cart: number[] = [];
+
+	function addToCart(productId: number) {
+		if (!cart.includes(productId)) {
+			cart = [...cart, productId];
 		}
-	];
+	}
+
+	function removeFromCart(productId: number) {
+		if (cart.includes(productId)) {
+			cart.splice(cart.indexOf(productId), 1);
+			cart = cart;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -99,47 +70,35 @@
 		</div>
 	</section>
 
-	<section>
+	<section id="box">
 		<h1>what's in the box?</h1>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-			labore et dolore magna aliqua. Et malesuada fames ac turpis egestas. Elementum curabitur vitae
-			nunc sed velit dignissim sodales. Purus in massa tempor nec feugiat nisl pretium.
-		</p>
+		<img src="/assets/whatsinthebox.png" alt="An illustration of what's in the box of Mentor" />
 	</section>
 
 	<section id="products">
 		<h1>our products</h1>
 
 		<div class="product-list">
-			{#each products as product}
-				<div class="item col col-33">
-					<div class="image" style={`background: url('${product.image}')`} />
-					<div class="title">{product.name}</div>
-					<div class="price">{(product.price * 1.21).toFixed(2)} €</div>
-					<div class="cart-button">
-						{#if !product.inCart}
-							<button
-								class="button rounded"
-								on:click={() => {
-									product.inCart = true;
-								}}
-							>
-								<i class="la la-shopping-cart" /> Add to cart
-							</button>
-						{:else}
-							<button
-								class="button red rounded"
-								on:click={() => {
-									product.inCart = false;
-								}}
-							>
-								<i class="la la-times" /> Remove from cart
-							</button>
-						{/if}
+			{#key cart}
+				{#each products as product}
+					<div class="item col col-33">
+						<div class="image" style={`background: url('${product.image}')`} />
+						<div class="title">{product.name}</div>
+						<div class="price">{(product.price * 1.21).toFixed(2)} €</div>
+						<div class="cart-button">
+							{#if cart.indexOf(product.id) == -1}
+								<button class="button rounded" on:click={() => addToCart(product.id)}>
+									<i class="la la-shopping-cart" /> Add to cart
+								</button>
+							{:else}
+								<button class="button red rounded" on:click={() => removeFromCart(product.id)}>
+									<i class="la la-times" /> Remove from cart
+								</button>
+							{/if}
+						</div>
 					</div>
-				</div>
-			{/each}
+				{/each}
+			{/key}
 		</div>
 	</section>
 
@@ -165,8 +124,8 @@
 	</section>
 </div>
 
-{#if products.filter((p) => p.inCart).length > 0}
-	<Cart bind:items={products} />
+{#if cart.length > 0}
+	<Cart bind:cart {removeFromCart} />
 {/if}
 
 <style>
@@ -225,7 +184,7 @@
 		max-width: 1200px;
 		width: 100%;
 
-        font-size: 20px;
+		font-size: 20px;
 	}
 
 	section h1 {
@@ -274,6 +233,11 @@
 	section#team .row .col {
 		padding: 15px;
 		text-align: center;
+	}
+
+	section#box img {
+		width: 100%;
+		margin-top: 30px;
 	}
 
 	section#products .col {

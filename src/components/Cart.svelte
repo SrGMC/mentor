@@ -1,16 +1,22 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
+	import type { Product } from '../data/types';
+	import { getProductById } from '../data/products';
 
-	export let items: any[] = [];
+	export let cart: number[];
+	export let removeFromCart = (productId: number) => {};
 	let open = false;
 
-	$: itemsInCart = items.filter((i) => i.inCart);
+	$: itemsInCart = <Product[]>cart
+		.map((c) => {
+			return getProductById(c);
+		})
+		.filter((i) => i != null && i != undefined);
 	$: totalBeforeTax =
 		itemsInCart.length > 0
 			? itemsInCart
 					.map((i) => i.price)
 					.reduce((accumulator, currentValue) => {
-						console.log(accumulator, currentValue);
 						return accumulator + currentValue;
 					})
 			: 0;
@@ -19,7 +25,7 @@
 {#if open}
 	<div class="cart-content" transition:fade={{ duration: 150 }}>
 		<h2>Shopping cart</h2>
-		{#each items.filter((i) => i.inCart) as item}
+		{#each itemsInCart as item}
 			<div class="item">
 				<div class="row">
 					<div class="col col-80">
@@ -29,9 +35,7 @@
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<div
 						class="col col-20 remove"
-						on:click={() => {
-							item.inCart = false;
-						}}
+						on:click={() => removeFromCart(item.id)}
 					>
 						<i class="la la-trash" />
 					</div>
@@ -130,10 +134,10 @@
 		margin-top: 5px;
 	}
 
-    .item {
-        margin: 10px 0;
-    }
-        
+	.item {
+		margin: 10px 0;
+	}
+
 	.item .remove {
 		font-size: 1.5rem;
 		margin-top: 7px;

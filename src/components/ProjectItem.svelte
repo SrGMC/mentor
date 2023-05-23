@@ -1,60 +1,65 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import { goto } from '$app/navigation';
+	import { getProductById } from '../data/products';
+	import { getProjectById } from '../data/projects';
+	import type { Product, Project, UserProject } from '../data/types';
 
-	export let id = 1;
-	export let title = 'Project title';
-	export let type = 'Type';
-	export let lastOpened = new Date().toLocaleDateString();
-	export let percentCompleted = 20;
-	export let image = '/assets/electronics.jpg';
+	export let userProject: UserProject;
+	let project = <Project>getProjectById(userProject.projectId);
+	let board = <Product>getProductById(project?.board);
+	let percentageCompleted = (userProject.currentStep / (project.steps.length - 1)) * 100;
+	console.log(percentageCompleted)
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
 	class="item"
 	on:click={() => {
-		goto(`/project?id=${id}`);
+		goto(`/project?userProjectId=${userProject.id}&projectId=${project?.id}`);
 	}}
 >
 	<div class="row">
-		<div class="col col-20 image" style={`background-image: url('${image}')`}>.</div>
+		<div class="col col-20 image" style={`background-image: url('${board.image}')`}>.</div>
 		<div class="col col-80 content">
 			<div class="row">
 				<div class="col col-85">
-					<div class="title">{title}</div>
-					<div class="type">{type}</div>
+					<div class="title">{project.name}</div>
+					<div class="type">{board.name}</div>
 				</div>
 				<div class="col col-15 open-button">
-					<a href={`/project?id=${id}`} class="button">Open →</a>
+					<a
+						href={`/project?userProjectId=${userProject.id}&projectId=${project?.id}`}
+						class="button">Open →</a
+					>
 				</div>
 			</div>
 
-			<div class="last-opened">Last opened: {lastOpened}</div>
+			<div class="last-opened">Last opened: {userProject.lastOpened.toLocaleDateString()}</div>
 			<div class="progress-bar">
-				<div class="bar" style={`width: ${percentCompleted}%;`} />
+				<div class="bar" style={`width: ${percentageCompleted}%;`} />
 			</div>
-			<div class="percent-completed">{percentCompleted}% completed</div>
+			<div class="percent-completed">{percentageCompleted.toFixed(0)}% completed</div>
 		</div>
 	</div>
 </div>
 
 <style>
 	.item {
-		border: 2px solid #dee2e6;
+		/* border: 2px solid #dee2e6; */
 		border-radius: var(--border-radius);
 		background-color: #f1f3f5;
 		color: var(--dark-color);
-        cursor: pointer;
+		cursor: pointer;
 	}
 
-    .item:hover {
-        opacity: 0.8;
-    }
+	.item:hover {
+		opacity: 0.8;
+	}
 
 	.item .image {
 		color: transparent;
-        border-top-left-radius: var(--border-radius);
-        border-bottom-left-radius: var(--border-radius);
+		border-top-left-radius: var(--border-radius);
+		border-bottom-left-radius: var(--border-radius);
 		background-size: cover;
 		background-position: center;
 		height: 100%;
@@ -92,7 +97,7 @@
 
 	.item .progress-bar {
 		background-color: #dee2e6;
-		border: 1px solid var(--dark-color-variant2);
+		/* border: 1px solid var(--dark-color-variant2); */
 		border-radius: var(--border-radius);
 		width: 100%;
 		height: 28px;

@@ -1,0 +1,224 @@
+<script lang="ts">
+	import { getProjectById } from '../../data/projects';
+	import { getUserProject as getUserProjectById, setUserProjectProperty } from '$lib/scripts/utils';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import StatusBar from './StatusBar.svelte';
+	import type { Project, Tool, UserProject } from '../../data/types';
+	import Popup from '../../components/Popup.svelte';
+
+	let userProjectId = parseInt(<string>$page.url.searchParams.get('userProjectId'));
+	let projectId = parseInt(<string>$page.url.searchParams.get('projectId'));
+
+	let popupOpen = false;
+
+	$: userProject = <UserProject>getUserProjectById(<UserProject['id']>userProjectId);
+	$: project = <Project>getProjectById(<Project['id']>projectId);
+
+	let currentTool: Tool | undefined = undefined;
+	let resuming: boolean;
+	let direction: 'forward' | 'backward' = 'forward';
+
+	onMount(() => {
+		if (!userProject || !project) {
+			alert('Project not found');
+			goto('/dashboard/');
+		}
+
+		resuming = userProject.currentStep != 0;
+		currentTool = project.steps[userProject.currentStep].tool;
+		if (currentTool) {
+			userProject.currentStep--;
+			popupOpen = true;
+		}
+	});
+
+	function next() {
+		direction = 'forward';
+		const nextTool = project.steps[userProject.currentStep + 1].tool;
+		if ((!currentTool && nextTool) || (currentTool && !nextTool)) {
+			popupOpen = true;
+			return;
+		}
+		if (userProject.currentStep < project.steps.length - 1) {
+			userProject = setUserProjectProperty(userProject, 'currentStep', userProject.currentStep + 1);
+		}
+	}
+
+	function previous() {
+		direction = 'backward';
+		const previousTool = project.steps[userProject.currentStep - 1].tool;
+		if ((!currentTool && previousTool) || (currentTool && !previousTool)) {
+			popupOpen = true;
+			return;
+		}
+
+		if (userProject.currentStep > 0) {
+			userProject = setUserProjectProperty(userProject, 'currentStep', userProject.currentStep - 1);
+		}
+	}
+
+	function pickUpTool() {
+		currentTool =
+			direction == 'forward'
+				? project.steps[userProject.currentStep + 1].tool
+				: project.steps[userProject.currentStep - 1].tool;
+		if (userProject.currentStep < project.steps.length - 1) {
+			userProject = setUserProjectProperty(
+				userProject,
+				'currentStep',
+				direction == 'forward' ? userProject.currentStep + 1 : userProject.currentStep - 1
+			);
+		}
+		popupOpen = false;
+	}
+
+	function placeBackTool() {
+		currentTool = undefined;
+		if (userProject.currentStep < project.steps.length - 1) {
+			userProject = setUserProjectProperty(
+				userProject,
+				'currentStep',
+				direction == 'forward' ? userProject.currentStep + 1 : userProject.currentStep - 1
+			);
+		}
+		popupOpen = false;
+	}
+</script>
+
+<Popup open={popupOpen}>
+	<div class="popup">
+		{#if resuming}
+			<!-- svelte-ignore a11y-missing-attribute -->
+			<img src={currentTool?.image} />
+			<p class="tool-description">
+				To continue, please pick up the {currentTool?.name} from the board.
+			</p>
+			<button
+				class="button"
+				on:click={() => {
+					pickUpTool();
+					resuming = false;
+				}}>I have picked up the tool</button
+			>
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<div
+				class="previous"
+				on:click={() => {
+					resuming = false;
+					popupOpen = false;
+				}}
+			>
+				← Go to previous step
+			</div>
+		{:else if direction == 'forward'}
+			{#if !currentTool && project.steps[userProject.currentStep + 1].tool}
+				<!-- svelte-ignore a11y-missing-attribute -->
+				<img src={project.steps[userProject.currentStep + 1].tool?.image} />
+				<p class="tool-description">
+					To continue, please pick up the {project.steps[userProject.currentStep + 1].tool?.name} from
+					the board.
+				</p>
+				<button class="button" on:click={pickUpTool}>I have picked up the tool</button>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<div
+					class="previous"
+					on:click={() => {
+						popupOpen = false;
+					}}
+				>
+					← Keep me in this step
+				</div>
+			{:else}
+				<!-- svelte-ignore a11y-missing-attribute -->
+				<img src={currentTool?.image} />
+				<p class="tool-description">
+					To continue, please place the {currentTool?.name} back to the board.
+				</p>
+				<button class="button" on:click={placeBackTool}>I have placed back the tool</button>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<div
+					class="previous"
+					on:click={() => {
+						popupOpen = false;
+					}}
+				>
+					← Keep me in this step
+				</div>
+			{/if}
+		{:else if direction == 'backward'}
+			{#if !currentTool && project.steps[userProject.currentStep - 1].tool}
+				<!-- svelte-ignore a11y-missing-attribute -->
+				<img src={project.steps[userProject.currentStep - 1].tool?.image} />
+				<p class="tool-description">
+					To continue, please pick up the {project.steps[userProject.currentStep - 1].tool?.name} from
+					the board.
+				</p>
+				<button class="button" on:click={pickUpTool}>I have picked up the tool</button>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<div
+					class="previous"
+					on:click={() => {
+						popupOpen = false;
+					}}
+				>
+					← Keep me in this step
+				</div>
+			{:else}
+				<!-- svelte-ignore a11y-missing-attribute -->
+				<img src={currentTool?.image} />
+				<p class="tool-description">
+					To continue, please place the {currentTool?.name} back to the board.
+				</p>
+				<button class="button" on:click={placeBackTool}>I have placed back the tool</button>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<div
+					class="previous"
+					on:click={() => {
+						popupOpen = false;
+					}}
+				>
+					← Keep me in this step
+				</div>
+			{/if}
+		{/if}
+	</div>
+</Popup>
+
+<div class="step">
+	<div style="width: calc(100% - 200px);">
+		{@html project.steps[userProject.currentStep].content}
+	</div>
+</div>
+
+<StatusBar bind:userProject bind:project {next} {previous} />
+
+<style>
+	.step {
+		padding: 0 100px;
+		display: flex;
+		align-items: center;
+		position: relative;
+		top: 64px;
+		bottom: 64px;
+		left: 0;
+		right: 0;
+		height: calc(100% - 64px - 64px);
+		width: 100%;
+	}
+
+	.popup .tool-description {
+		font-size: 1.5rem;
+	}
+
+	.popup .previous {
+		cursor: pointer;
+		text-decoration: underline;
+		margin-top: 10px;
+	}
+
+	.popup img {
+		height: 200px;
+	}
+</style>
