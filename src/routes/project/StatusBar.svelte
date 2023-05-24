@@ -6,7 +6,13 @@
 	export let project: Project;
 	export let next = () => {};
 	export let previous = () => {};
+
+	$: percentageCompleted = (userProject.currentStep / (project.steps.length - 1)) * 100;
 </script>
+
+<div class="progressbar">
+	<div class="progress" style={`width: ${percentageCompleted}%;`}></div>
+</div>
 
 <div class="statusbar">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -93,5 +99,26 @@
 		width: 60%;
 		margin: 0 auto;
 		color: var(--dark-color-variant2);
+	}
+
+	.progressbar {
+		position: fixed;
+		bottom: 64px;
+		left: 0;
+		right: 0;
+		height: 6px;
+		background-color: #fff;
+	}
+
+	.progressbar .progress {
+		position: absolute;
+		display: inline-block;
+		height: 6px;
+		background: linear-gradient(90deg, rgba(255, 243, 59, 1) 0%, rgba(233, 62, 58, 1) 100%);
+		width: 20%;
+		margin: 0;
+		padding: 0;
+
+		transition: all 0.25s ease-in-out;
 	}
 </style>
