@@ -30,7 +30,7 @@
 		resuming = userProject.currentStep != 0;
 		currentTool = project.steps[userProject.currentStep].tool;
 
-		if(userProject.currentStep == project.steps.length -1) {
+		if (userProject.currentStep == project.steps.length - 1) {
 			finished = true;
 			return;
 		}
@@ -60,7 +60,7 @@
 		finished = false;
 		const previousTool = project.steps[userProject.currentStep - 1].tool;
 
-		console.log("Called previous()", previousTool, currentTool, direction)
+		console.log('Called previous()', previousTool, currentTool, direction);
 
 		if ((!currentTool && previousTool) || (currentTool && !previousTool)) {
 			popupOpen = true;
@@ -99,6 +99,14 @@
 		popupOpen = false;
 	}
 </script>
+
+<svelte:head>
+	{#if project}
+		<title>{project.name} | Mentor</title>
+	{:else}
+		<title>Project not found | Mentor</title>
+	{/if}
+</svelte:head>
 
 <Popup confetti={true} open={finished}>
 	<div class="popup">
