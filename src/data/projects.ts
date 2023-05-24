@@ -32,16 +32,16 @@ const projects: Project[] = [
 			},
 			{
 				content:
-					'<p>Place the wooden strips and the plexiglass in a rectangle-like shape, with the plexiglass in the center.</p>'
+					'<div class=row><div class="col col-50"><p>Place the wooden strips and the plexiglass in a rectangle-like shape, with the plexiglass in the center.</p></div><div class="col col-50"><img src=/assets/projects/1/step5.jpeg></div></div>'
 			},
 			{
 				content:
-					'<div class=row><div class="col col-50"><p>Apply glue evenly along one edge of the plexiglass, following the order on the diagram.</p></div><div class="col col-50"><img src=/assets/projects/1/step5.png></div></div>',
+					'<div class=row><div class="col col-50"><p>Apply glue evenly along one edge of the plexiglass, following the order on the diagram.</p></div><div class="col col-50"><img src=/assets/projects/1/step6.png></div></div>',
 				tool: <Tool>getToolById('gluegun')
 			},
 			{
 				content:
-					'<div class=row><div class="col col-50"><p>Remove the protective film from the acrylic plexiglass.</p></div><div class="col col-50"><img src=/assets/projects/1/step6.png></div></div>'
+					'<div class=row><div class="col col-50"><p>Remove the protective film from the acrylic plexiglass.</p></div><div class="col col-50"><img src=/assets/projects/1/step7.jpeg></div></div>'
 			}
 		]
 	}
