@@ -53,19 +53,13 @@
 		</p>
 		<div class="row">
 			<div class="col col-33">
-				<div class="highlight" style={`background: url('/assets/painting.jpg');`}>
-					<div class="text">Lorem ipsum dolor sit amet</div>
-				</div>
+				<div class="highlight" style={`background: url('/assets/painting.jpg');`} />
 			</div>
 			<div class="col col-33">
-				<div class="highlight" style={`background: url('/assets/woodwork.jpg');`}>
-					<div class="text">Lorem ipsum dolor sit amet</div>
-				</div>
+				<div class="highlight" style={`background: url('/assets/woodwork.jpg');`} />
 			</div>
 			<div class="col col-33">
-				<div class="highlight" style={`background: url('/assets/sewing.jpg');`}>
-					<div class="text">Lorem ipsum dolor sit amet</div>
-				</div>
+				<div class="highlight" style={`background: url('/assets/sewing.jpg');`} />
 			</div>
 		</div>
 	</section>
@@ -108,12 +102,16 @@
 			<div class="member col col-33">
 				<div class="image" style={`background: url('/assets/team/alvaro.jpeg');`} />
 				<div class="title">Álvaro Galisteo</div>
-				<div class="description">Developer<br><a href="https://alvaro.galisteo.me/">https://alvaro.galisteo.me/</a></div>
+				<div class="description">
+					Developer<br /><a href="https://alvaro.galisteo.me/">https://alvaro.galisteo.me/</a>
+				</div>
 			</div>
 			<div class="member col col-33">
 				<div class="image" style={`background: url('/assets/team/sarah.jpeg');`} />
 				<div class="title">Sarah Galisteo</div>
-				<div class="description">UI Designer<br><a href="https://sarah.galisteo.me/">https://sarah.galisteo.me/</a></div>
+				<div class="description">
+					UI Designer<br /><a href="https://sarah.galisteo.me/">https://sarah.galisteo.me/</a>
+				</div>
 			</div>
 			<div class="member col col-33">
 				<div class="image" style={`background: url('/assets/team/berta.jpg');`} />

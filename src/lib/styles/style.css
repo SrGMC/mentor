@@ -92,7 +92,8 @@ div.error {
 }
 
 .step img {
-    width: 100%;
+    text-align: center;
+    width: 50%;
 }
 
 .step * {
