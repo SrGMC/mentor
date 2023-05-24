@@ -3,7 +3,7 @@ export type Product = {
 	name: string;
 	price: number;
 	image: string;
-    tools: Tool[];
+	tools: Tool[];
 };
 
 export type Project = {
@@ -30,3 +30,31 @@ export type UserProject = {
 	lastOpened: Date;
 	currentStep: number;
 };
+
+export class Board {
+	board: Product;
+	address: string;
+	id: string;
+
+	constructor(address: string, id: string, board: Product) {
+		this.board = board;
+		this.address = address;
+		this.id = id;
+	}
+
+	on() {
+		return fetch(`http://${this.address}/on`);
+	}
+
+	off() {
+		return fetch(`http://${this.address}/off`);
+	}
+
+	toggle() {
+		return fetch(`http://${this.address}/toggle`);
+	}
+
+	async status() {
+		return await (await fetch(`http://${this.address}/status`)).json();
+	}
+}

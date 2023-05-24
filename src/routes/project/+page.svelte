@@ -5,8 +5,9 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import StatusBar from './StatusBar.svelte';
-	import type { Project, Tool, UserProject } from '../../data/types';
+	import { Board, type Product, type Project, type Tool, type UserProject } from '../../data/types';
 	import Popup from '../../components/Popup.svelte';
+	import { getProductByName } from '../../data/products';
 
 	let userProjectId = parseInt(<string>$page.url.searchParams.get('userProjectId'));
 	let projectId = parseInt(<string>$page.url.searchParams.get('projectId'));
@@ -21,10 +22,17 @@
 	let resuming: boolean;
 	let direction: 'forward' | 'backward' = 'forward';
 
+	let board: Board;
+
 	onMount(() => {
 		if (!userProject || !project) {
 			alert('Project not found');
 			goto('/dashboard/');
+		}
+
+		if (localStorage.getItem('board')) {
+			const linkedBoard = JSON.parse(<string>localStorage.getItem('board'));
+			board = new Board(linkedBoard.ip, linkedBoard.id, <Product>getProductByName('woodwork'));
 		}
 
 		resuming = userProject.currentStep != 0;
@@ -46,6 +54,9 @@
 		const nextTool = project.steps[userProject.currentStep + 1]?.tool;
 		if ((!currentTool && nextTool) || (currentTool && !nextTool)) {
 			popupOpen = true;
+			if (board) {
+				board.on();
+			}
 			return;
 		}
 		if (userProject.currentStep < project.steps.length - 1) {
@@ -64,6 +75,9 @@
 
 		if ((!currentTool && previousTool) || (currentTool && !previousTool)) {
 			popupOpen = true;
+			if (board) {
+				board.on();
+			}
 			return;
 		}
 
@@ -95,6 +109,10 @@
 				'currentStep',
 				direction == 'forward' ? userProject.currentStep + 1 : userProject.currentStep - 1
 			);
+
+			if (board) {
+				board.off();
+			}
 		}
 		popupOpen = false;
 	}
