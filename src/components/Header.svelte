@@ -46,10 +46,10 @@
 
 <nav class="scrolled">
 	{#if $page.url.pathname == '/project/'}
-		<img alt="Mentor logo" src="https://placehold.co/64" height="64" width="64" />
+		<img alt="Mentor logo" src="/mentor.png" height="64" width="64" />
 	{:else}
 		<a href="/" class="logo scrolled">
-			<img alt="Mentor logo" src="https://placehold.co/64" height="64" width="64" />
+			<img alt="Mentor logo" src="/mentor.png" height="64" width="64" />
 		</a>
 	{/if}
 	<ul class="links">
