@@ -247,7 +247,7 @@
 
 <style>
 	.step {
-		padding: 0 100px;
+		padding-left: 120px;
 		display: flex;
 		align-items: center;
 		position: relative;
@@ -256,7 +256,10 @@
 		left: 0;
 		right: 0;
 		height: calc(100% - 64px - 64px);
-		width: 100%;
+		width: calc(100% - 80px);
+		overflow: hidden;
+		flex-shrink: 0;
+		margin: 0;
 	}
 
 	.popup .tool-description {

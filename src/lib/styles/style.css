@@ -94,3 +94,7 @@ div.error {
 .step img {
     width: 100%;
 }
+
+.step * {
+    overflow: hidden;
+}
