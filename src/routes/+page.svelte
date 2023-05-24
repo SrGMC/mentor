@@ -106,7 +106,7 @@
 		<h1>meet the team</h1>
 		<div class="row">
 			<div class="member col col-33">
-				<div class="image" style={`background: url('/assets/painting.jpg');`} />
+				<div class="image" style={`background: url('/assets/team/alvaro.jpeg');`} />
 				<div class="title">Álvaro Galisteo</div>
 				<div class="description">Developer<br><a href="https://alvaro.galisteo.me/">https://alvaro.galisteo.me/</a></div>
 			</div>
@@ -116,7 +116,7 @@
 				<div class="description">UI Designer<br><a href="https://sarah.galisteo.me/">https://sarah.galisteo.me/</a></div>
 			</div>
 			<div class="member col col-33">
-				<div class="image" style={`background: url('/assets/painting.jpg');`} />
+				<div class="image" style={`background: url('/assets/team/berta.jpg');`} />
 				<div class="title">Berta</div>
 				<div class="description">Dog</div>
 			</div>
