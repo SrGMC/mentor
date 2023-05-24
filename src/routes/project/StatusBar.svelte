@@ -15,12 +15,19 @@
 	</div>
 	<div class="center">{userProject.currentStep + 1}/{project.steps.length}</div>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div
-		class={`next ${userProject.currentStep == project.steps.length - 1 ? 'disabled' : ''}`}
-		on:click={next}
-	>
-		Next <i class="las la-angle-right" />
-	</div>
+	{#if userProject.currentStep < project.steps.length - 1}
+		<div
+			class={`next ${userProject.currentStep == project.steps.length - 1 ? 'disabled' : ''}`}
+			on:click={next}
+		>
+			Next <i class="las la-angle-right" />
+		</div>
+	{:else}
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div class="next" on:click={next}>
+			<i class="las la-check-circle" />&nbsp;Finish project
+		</div>
+	{/if}
 </div>
 
 <style>

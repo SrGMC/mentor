@@ -108,12 +108,12 @@
 			<div class="member col col-33">
 				<div class="image" style={`background: url('/assets/painting.jpg');`} />
 				<div class="title">Álvaro Galisteo</div>
-				<div class="description">Developer</div>
+				<div class="description">Developer<br><a href="https://alvaro.galisteo.me/">https://alvaro.galisteo.me/</a></div>
 			</div>
 			<div class="member col col-33">
 				<div class="image" style={`background: url('/assets/painting.jpg');`} />
 				<div class="title">Sarah Galisteo</div>
-				<div class="description">UI Designer</div>
+				<div class="description">UI Designer<br><a href="https://sarah.galisteo.me/">https://sarah.galisteo.me/</a></div>
 			</div>
 			<div class="member col col-33">
 				<div class="image" style={`background: url('/assets/painting.jpg');`} />

@@ -12,6 +12,7 @@
 	let projectId = parseInt(<string>$page.url.searchParams.get('projectId'));
 
 	let popupOpen = false;
+	let finished = false;
 
 	$: userProject = <UserProject>getUserProjectById(<UserProject['id']>userProjectId);
 	$: project = <Project>getProjectById(<Project['id']>projectId);
@@ -28,6 +29,12 @@
 
 		resuming = userProject.currentStep != 0;
 		currentTool = project.steps[userProject.currentStep].tool;
+
+		if(userProject.currentStep == project.steps.length -1) {
+			finished = true;
+			return;
+		}
+
 		if (currentTool) {
 			userProject.currentStep--;
 			popupOpen = true;
@@ -36,19 +43,25 @@
 
 	function next() {
 		direction = 'forward';
-		const nextTool = project.steps[userProject.currentStep + 1].tool;
+		const nextTool = project.steps[userProject.currentStep + 1]?.tool;
 		if ((!currentTool && nextTool) || (currentTool && !nextTool)) {
 			popupOpen = true;
 			return;
 		}
 		if (userProject.currentStep < project.steps.length - 1) {
 			userProject = setUserProjectProperty(userProject, 'currentStep', userProject.currentStep + 1);
+		} else {
+			finished = true;
 		}
 	}
 
 	function previous() {
 		direction = 'backward';
+		finished = false;
 		const previousTool = project.steps[userProject.currentStep - 1].tool;
+
+		console.log("Called previous()", previousTool, currentTool, direction)
+
 		if ((!currentTool && previousTool) || (currentTool && !previousTool)) {
 			popupOpen = true;
 			return;
@@ -64,7 +77,7 @@
 			direction == 'forward'
 				? project.steps[userProject.currentStep + 1].tool
 				: project.steps[userProject.currentStep - 1].tool;
-		if (userProject.currentStep < project.steps.length - 1) {
+		if (userProject.currentStep >= 0 && userProject.currentStep <= project.steps.length - 1) {
 			userProject = setUserProjectProperty(
 				userProject,
 				'currentStep',
@@ -76,7 +89,7 @@
 
 	function placeBackTool() {
 		currentTool = undefined;
-		if (userProject.currentStep < project.steps.length - 1) {
+		if (userProject.currentStep >= 0 && userProject.currentStep <= project.steps.length - 1) {
 			userProject = setUserProjectProperty(
 				userProject,
 				'currentStep',
@@ -86,6 +99,28 @@
 		popupOpen = false;
 	}
 </script>
+
+<Popup confetti={true} open={finished}>
+	<div class="popup">
+		<div class="tick">
+			<i class="las la-check-circle" />
+		</div>
+		<h1>You have completed this project!</h1>
+		<a class="button rounded" href="/dashboard/">Exit project</a><br /><br />
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div
+			class="link"
+			style="color: var(--red-color)"
+			on:click={() => {
+				finished = false;
+				setUserProjectProperty(userProject, 'currentStep', 0);
+				window.location.reload();
+			}}
+		>
+			Restart project
+		</div>
+	</div>
+</Popup>
 
 <Popup open={popupOpen}>
 	<div class="popup">
@@ -102,16 +137,6 @@
 					resuming = false;
 				}}>I have picked up the tool</button
 			>
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<div
-				class="previous"
-				on:click={() => {
-					resuming = false;
-					popupOpen = false;
-				}}
-			>
-				← Go to previous step
-			</div>
 		{:else if direction == 'forward'}
 			{#if !currentTool && project.steps[userProject.currentStep + 1].tool}
 				<!-- svelte-ignore a11y-missing-attribute -->
@@ -123,7 +148,7 @@
 				<button class="button" on:click={pickUpTool}>I have picked up the tool</button>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div
-					class="previous"
+					class="link"
 					on:click={() => {
 						popupOpen = false;
 					}}
@@ -139,7 +164,7 @@
 				<button class="button" on:click={placeBackTool}>I have placed back the tool</button>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div
-					class="previous"
+					class="link"
 					on:click={() => {
 						popupOpen = false;
 					}}
@@ -158,7 +183,7 @@
 				<button class="button" on:click={pickUpTool}>I have picked up the tool</button>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div
-					class="previous"
+					class="link"
 					on:click={() => {
 						popupOpen = false;
 					}}
@@ -174,7 +199,7 @@
 				<button class="button" on:click={placeBackTool}>I have placed back the tool</button>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div
-					class="previous"
+					class="link"
 					on:click={() => {
 						popupOpen = false;
 					}}
@@ -212,7 +237,7 @@
 		font-size: 1.5rem;
 	}
 
-	.popup .previous {
+	.popup .link {
 		cursor: pointer;
 		text-decoration: underline;
 		margin-top: 10px;
@@ -220,5 +245,10 @@
 
 	.popup img {
 		height: 200px;
+	}
+
+	.popup .tick {
+		color: #40c057;
+		font-size: 10rem;
 	}
 </style>

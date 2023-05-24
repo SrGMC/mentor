@@ -5,6 +5,8 @@ html {
     --light-color: #FFFFFF;
     --red-color: #c92a2a;
     --red-color-variant: #f03e3e;
+    --green-color: #2f9e44;
+    --green-color-variant: #40c057;
 
     --border-radius: 15px;
 
@@ -35,6 +37,14 @@ html {
     background-color: var(--red-color-variant);
 }
 
+.button.green {
+    background-color: var(--green-color);
+}
+
+.button.green:hover {
+    background-color: var(--green-color-variant);
+}
+
 .button:hover,
 .button:disabled {
     background-color: var(--dark-color-variant);
@@ -60,7 +70,7 @@ a.button {
 
 div.error {
     color: #fff;
-    background-color:#c92a2a ;
+    background-color: #c92a2a;
     max-width: 700px;
     padding: 15px;
     margin: 15px auto;
